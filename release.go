@@ -38,7 +38,7 @@ func release(source, destination string) (err error) {
 		return
 	}
 
-	out.Notification("Destination branch \"%s\" already up to date", destination)
+	out.Success("Destination branch \"%s\" synced with source branch \"%s\"", destination, source)
 
 	// Push updated changes to origin
 	if err = gitPush(); err != nil {
