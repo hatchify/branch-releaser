@@ -61,6 +61,7 @@ func main() {
 		return
 	}
 
+	// Get ignored list
 	ignored := getIgnored()
 
 	// Iterate through all the child directories
