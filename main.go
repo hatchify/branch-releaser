@@ -37,8 +37,33 @@ func main() {
 		return
 	}
 
-	if err = release(source, destination); err != nil {
+	var cwd string
+	if cwd, err = os.Getwd(); err != nil {
+		out.Error("error getting current working directory: %v", err)
 		return
+	}
+	defer os.Chdir(cwd)
+
+	var dirs []string
+	if dirs, err = getDirs(recursive); err != nil {
+		out.Error("error getting target directories: %v", err)
+		return
+	}
+
+	for _, dir := range dirs {
+		if err = os.Chdir(dir); err != nil {
+			out.Error("error switching to directory \"%s\": %v", dir, err)
+			return
+		}
+
+		if err = release(source, destination); err != nil {
+			return
+		}
+
+		if err = os.Chdir("../"); err != nil {
+			out.Error("error switching to directory \"%s\": %v", dir, err)
+			return
+		}
 	}
 }
 
