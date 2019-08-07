@@ -44,24 +44,23 @@ func main() {
 	}
 	defer os.Chdir(cwd)
 
+	if !recursive {
+		err = release(source, destination)
+		return
+	}
+
+	out.Notification("Beginning recursive release for the children of \"%s\"", cwd)
+
 	var dirs []string
-	if dirs, err = getDirs(recursive); err != nil {
+	if dirs, err = getDirs(); err != nil {
 		out.Error("error getting target directories: %v", err)
 		return
 	}
 
 	for _, dir := range dirs {
-		if err = os.Chdir(dir); err != nil {
-			out.Error("error switching to directory \"%s\": %v", dir, err)
-			return
-		}
-
-		if err = release(source, destination); err != nil {
-			return
-		}
-
-		if err = os.Chdir("../"); err != nil {
-			out.Error("error switching to directory \"%s\": %v", dir, err)
+		if err = executeWithinDir(dir, func() (err error) {
+			return release(source, destination)
+		}); err != nil {
 			return
 		}
 	}
