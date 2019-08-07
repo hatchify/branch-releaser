@@ -9,13 +9,7 @@ func trimLast(in string) (out string) {
 	return in[:len(in)-1]
 }
 
-func getDirs(recursive bool) (dirs []string, err error) {
-	if !recursive {
-		// Set target dir as the current one
-		dirs = []string{"./"}
-		return
-	}
-
+func getDirs() (dirs []string, err error) {
 	var fis []os.FileInfo
 	if fis, err = ioutil.ReadDir("./"); err != nil {
 		return
@@ -39,4 +33,22 @@ func getDirs(recursive bool) (dirs []string, err error) {
 	}
 
 	return
+}
+
+func executeWithinDir(dir string, fn func() error) (err error) {
+	var cwd string
+	if cwd, err = os.Getwd(); err != nil {
+		out.Error("error getting current working directory: %v", err)
+		return
+	}
+	defer os.Chdir(cwd)
+
+	if err = os.Chdir(dir); err != nil {
+		out.Error("error switching to directory \"%s\": %v", dir, err)
+		return
+	}
+
+	out.Success("Switched to \"%s\"", dir)
+
+	return fn()
 }
