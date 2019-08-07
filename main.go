@@ -33,7 +33,14 @@ func main() {
 	}
 
 	if len(destination) == 0 {
-		out.Error("invalid source branch, cannot be empty")
+		out.Error("invalid destination branch, cannot be empty")
+		return
+	}
+
+	warn := getMeta(".branch-releaser-warn")
+
+	if warn.Has(destination) && !requestPermission(destination) {
+		out.Warning("Aborting..")
 		return
 	}
 
@@ -62,7 +69,7 @@ func main() {
 	}
 
 	// Get ignored list
-	ignored := getIgnored()
+	ignored := getMeta(".branch-releaser-ignore")
 
 	// Iterate through all the child directories
 	for _, dir := range dirs {
