@@ -7,22 +7,22 @@ import (
 	"github.com/hatchify/stringset"
 )
 
-func getIgnored() (ignored *stringset.StringSet) {
+func getMeta(filename string) (meta *stringset.StringSet) {
 	var (
 		f   *os.File
 		err error
 	)
 
-	// Attempt to open ignore file
-	if f, err = os.Open(".branch-releaser-ignore"); err != nil {
-		// Ignore file does not exist. This file is not required, so we do not need to throw an error.
+	// Attempt to open meta file
+	if f, err = os.Open(filename); err != nil {
+		// Meta file does not exist. This file is not required, so we do not need to throw an error.
 		return
 	}
 	// Defer the closing of the file
 	defer f.Close()
 
 	// Initialize new stringset
-	ignored = stringset.New()
+	meta = stringset.New()
 	// Initialize new scanner
 	scn := bufio.NewScanner(f)
 
@@ -37,8 +37,8 @@ func getIgnored() (ignored *stringset.StringSet) {
 			continue
 		}
 
-		// Set current line contents as a stringset key
-		ignored.Set(string(bs))
+		// Set current line contents as a meta key
+		meta.Set(string(bs))
 	}
 
 	return
