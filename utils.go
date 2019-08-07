@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 func trimLast(in string) (out string) {
@@ -58,4 +60,37 @@ func executeWithinDir(dir string, fn func() error) (err error) {
 
 	// Run provided func
 	return fn()
+}
+
+func getUserInput() (input string, err error) {
+	r := bufio.NewReader(os.Stdin)
+	if input, err = r.ReadString('\n'); err != nil {
+		return
+	}
+
+	input = trimLast(input)
+	return
+}
+
+func requestPermission(destination string) (ok bool) {
+	var (
+		input string
+		err   error
+	)
+
+	out.Warning("Attempting to update branch \"%s\", are you sure?", destination)
+
+	if input, err = getUserInput(); err != nil {
+		out.Error("error getting user input: %v", err)
+		return
+	}
+
+	// Convert to lowercase
+	input = strings.ToLower(input)
+
+	if input != "y" && input != "yes" {
+		return
+	}
+
+	return true
 }
