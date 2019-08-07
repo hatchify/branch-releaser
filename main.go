@@ -61,8 +61,14 @@ func main() {
 		return
 	}
 
+	ignored := getIgnored()
+
 	// Iterate through all the child directories
 	for _, dir := range dirs {
+		if ignored.Has(dir) {
+			continue
+		}
+
 		// Execute release for current child
 		if err = executeWithinDir(dir, func() (err error) {
 			return release(source, destination)
