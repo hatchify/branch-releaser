@@ -13,6 +13,9 @@ func getMeta(filename string) (meta *stringset.StringSet) {
 		err error
 	)
 
+	// Initialize new stringset
+	meta = stringset.New()
+
 	// Attempt to open meta file
 	if f, err = os.Open(filename); err != nil {
 		// Meta file does not exist. This file is not required, so we do not need to throw an error.
@@ -21,8 +24,6 @@ func getMeta(filename string) (meta *stringset.StringSet) {
 	// Defer the closing of the file
 	defer f.Close()
 
-	// Initialize new stringset
-	meta = stringset.New()
 	// Initialize new scanner
 	scn := bufio.NewScanner(f)
 
