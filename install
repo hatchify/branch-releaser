@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "Installing BranchReleaser"
+go get -u github.com/hatchify/branch-releaser;
