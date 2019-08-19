@@ -4,7 +4,7 @@ Branch releaser will aid in releasing branches up the chain
 ## Installation
 Installing by compilation is very straight forward. The following dependencies are required:
 - Go
-- GCC
+- GIT
 
 ### Method 1 - Download and install
 ```bash
