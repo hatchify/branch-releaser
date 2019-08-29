@@ -1,10 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"flag"
+	"fmt"
 	"os"
+	"sort"
 
 	"github.com/hatchify/output"
+	"github.com/hatchify/stringset"
 )
 
 var out = output.NewWrapper("Branch releaser")
@@ -17,6 +21,8 @@ func main() {
 		destination string
 		// Whether or not the current request is for the current directory or its children
 		recursive bool
+		// How the error should be handled
+		onError string
 
 		err error
 	)
@@ -24,6 +30,7 @@ func main() {
 	flag.StringVar(&source, "source", "", "Source branch to merge from")
 	flag.StringVar(&destination, "destination", "", "Destination branch to merge into")
 	flag.BoolVar(&recursive, "r", false, "Whether or not the current request is for the current directory or its children")
+	flag.StringVar(&onError, "onError", "exit", "How to handle errors (e.g. exit, warn, ignore)")
 	flag.Parse()
 	defer close(err)
 
@@ -59,6 +66,9 @@ func main() {
 	// Ensure we switch to the current working directory after our releases have completed
 	defer os.Chdir(cwd)
 
+	successful := stringset.New()
+	errored := stringset.New()
+
 	out.Notification("Beginning recursive release for the children of \"%s\"", cwd)
 
 	var dirs []string
@@ -80,9 +90,57 @@ func main() {
 		// Execute release for current child
 		if err = executeWithinDir(dir, func() (err error) {
 			return release(source, destination)
-		}); err != nil {
-			return
+		}); err == nil {
+			successful.Set(dir)
+			continue
 		}
+
+		switch onError {
+		case "exit":
+			out.Error(err.Error())
+			return
+
+		case "warn":
+			out.Warning(err.Error())
+		case "ignore":
+		}
+
+		err = nil
+		errored.Set(dir)
+	}
+
+	successResults := successful.Slice()
+	sort.Slice(successResults, func(a, b int) (less bool) {
+		return successResults[a] < successResults[b]
+	})
+
+	outBuf := bytes.NewBuffer(nil)
+	outBuf.WriteString("Successful:\n")
+
+	for _, result := range successResults {
+		line := fmt.Sprintf("\t- %s\n", result)
+		outBuf.WriteString(line)
+	}
+
+	fmt.Print("\n")
+	out.Success(outBuf.String())
+
+	errorResults := errored.Slice()
+	sort.Slice(errorResults, func(a, b int) (less bool) {
+		return errorResults[a] < errorResults[b]
+	})
+
+	if len(errorResults) > 0 {
+		errBuf := bytes.NewBuffer(nil)
+		errBuf.WriteString("Errored:\n")
+
+		for _, result := range errorResults {
+			line := fmt.Sprintf("\t- %s\n", result)
+			errBuf.WriteString(line)
+		}
+
+		fmt.Print("\n")
+		out.Error(errBuf.String())
 	}
 }
 
