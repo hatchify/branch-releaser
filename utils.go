@@ -8,6 +8,10 @@ import (
 )
 
 func trimLast(in string) (out string) {
+	if len(in) == 0 {
+		return
+	}
+
 	// Ignore the last byte and return the resulting string
 	return in[:len(in)-1]
 }
