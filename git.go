@@ -33,6 +33,14 @@ func gitMerge(branch string) (updated bool, err error) {
 	return
 }
 
+func gitFetch() (err error) {
+	if _, err = gitCmd("fetch", "origin"); err != nil {
+		return
+	}
+
+	return
+}
+
 func gitPush() (err error) {
 	_, err = gitCmd("push")
 	return
