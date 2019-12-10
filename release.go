@@ -1,9 +1,18 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func release(source, destination string) (err error) {
 	var origin string
+	// Attempt to fetch from origin
+	if err = gitFetch(); err != nil {
+		return
+	}
+
+	out.Success("Synced with origin")
+
 	// Get the branch set before the process started, will revert to this branch after
 	if origin, err = getBranchName(); err != nil {
 		err = fmt.Errorf("error getting branch name: %v", err)
@@ -11,13 +20,18 @@ func release(source, destination string) (err error) {
 	}
 	defer gitCheckout(origin)
 
-	// Sync with origin
-	if err = gitPull(); err != nil {
-		err = fmt.Errorf("error getting branch name: %v", err)
+	// Checkout the source branch
+	if err = gitCheckout(source); err != nil {
+		err = fmt.Errorf("error encountered while switching to branch \"%s\": %v", source, err)
 		return
 	}
 
-	out.Success("Synced with origin")
+	out.Success("Switched to source branch \"%s\"", source)
+
+	// Attempt to pull source branch
+	if err = gitPull(); err != nil {
+		return
+	}
 
 	// Checkout the destination branch
 	if err = gitCheckout(destination); err != nil {
@@ -26,6 +40,11 @@ func release(source, destination string) (err error) {
 	}
 
 	out.Success("Switched to destination branch \"%s\"", destination)
+
+	// Attempt to pull source branch
+	if err = gitPull(); err != nil {
+		return
+	}
 
 	var updated bool
 	// Merge the source branch INTO the destination branch
