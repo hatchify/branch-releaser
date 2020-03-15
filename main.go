@@ -7,11 +7,11 @@ import (
 	"os"
 	"sort"
 
-	"github.com/hatchify/output"
+	"github.com/hatchify/scribe"
 	"github.com/hatchify/stringset"
 )
 
-var out = output.NewWrapper("Branch releaser")
+var out = scribe.New("Branch releaser")
 
 func main() {
 	var (
@@ -60,7 +60,7 @@ func main() {
 	var cwd string
 	// Get the current working directory
 	if cwd, err = os.Getwd(); err != nil {
-		out.Error("error getting current working directory: %v", err)
+		out.Errorf("error getting current working directory: %v", err)
 		return
 	}
 	// Ensure we switch to the current working directory after our releases have completed
@@ -69,12 +69,12 @@ func main() {
 	successful := stringset.New()
 	errored := stringset.New()
 
-	out.Notification("Beginning recursive release for the children of \"%s\"", cwd)
+	out.Notificationf("Beginning recursive release for the children of \"%s\"", cwd)
 
 	var dirs []string
 	// Get the child directories for the current directory
 	if dirs, err = getDirs(); err != nil {
-		out.Error("error getting target directories: %v", err)
+		out.Errorf("error getting target directories: %v", err)
 		return
 	}
 
