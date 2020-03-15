@@ -48,7 +48,7 @@ func executeWithinDir(dir string, fn func() error) (err error) {
 	var cwd string
 	// Get the current working directory
 	if cwd, err = os.Getwd(); err != nil {
-		out.Error("error getting current working directory: %v", err)
+		out.Errorf("error getting current working directory: %v", err)
 		return
 	}
 	// Defer changing back to the current working directory after our execution is complete
@@ -56,11 +56,11 @@ func executeWithinDir(dir string, fn func() error) (err error) {
 
 	// Change directory to the provided target directory
 	if err = os.Chdir(dir); err != nil {
-		out.Error("error switching to directory \"%s\": %v", dir, err)
+		out.Errorf("error switching to directory \"%s\": %v", dir, err)
 		return
 	}
 
-	out.Success("Switched to \"%s\"", dir)
+	out.Successf("Switched to \"%s\"", dir)
 
 	// Run provided func
 	return fn()
@@ -82,10 +82,10 @@ func requestPermission(destination string) (ok bool) {
 		err   error
 	)
 
-	out.Warning("Attempting to update branch \"%s\", are you sure?", destination)
+	out.Warningf("Attempting to update branch \"%s\", are you sure?", destination)
 
 	if input, err = getUserInput(); err != nil {
-		out.Error("error getting user input: %v", err)
+		out.Errorf("error getting user input: %v", err)
 		return
 	}
 

@@ -26,7 +26,7 @@ func release(source, destination string) (err error) {
 		return
 	}
 
-	out.Success("Switched to source branch \"%s\"", source)
+	out.Successf("Switched to source branch \"%s\"", source)
 
 	// Attempt to pull source branch
 	if err = gitPull(); err != nil {
@@ -39,7 +39,7 @@ func release(source, destination string) (err error) {
 		return
 	}
 
-	out.Success("Switched to destination branch \"%s\"", destination)
+	out.Successf("Switched to destination branch \"%s\"", destination)
 
 	// Attempt to pull source branch
 	if err = gitPull(); err != nil {
@@ -55,11 +55,11 @@ func release(source, destination string) (err error) {
 
 	if !updated {
 		// No update occurred, leave note and return
-		out.Notification("Destination branch \"%s\" already up to date", destination)
+		out.Notificationf("Destination branch \"%s\" already up to date", destination)
 		return
 	}
 
-	out.Success("Destination branch \"%s\" synced with source branch \"%s\"", destination, source)
+	out.Successf("Destination branch \"%s\" synced with source branch \"%s\"", destination, source)
 
 	// Push updated changes to origin
 	if err = gitPush(); err != nil {
