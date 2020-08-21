@@ -5,7 +5,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/Hatch1fy/errors"
+	"github.com/hatchify/errors"
 )
 
 func getBranchName() (name string, err error) {
