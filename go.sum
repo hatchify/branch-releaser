@@ -1,10 +1,10 @@
 github.com/hatchify/colors v0.4.79 h1:E7LXqZVYDFNaTcQGxlBSfEKQ2rByeAUW84uKkat3AoA=
 github.com/hatchify/colors v0.4.79/go.mod h1:t0952Ef1zDFMVTCkOwhrdJS9ToVWTdcJ3PWCHZADLuU=
-github.com/hatchify/cron v0.4.81 h1:unQ8y1ltSL3RVM4wmC8RI9Uoy5qna07f4BMtvGTwNl4=
-github.com/hatchify/cron v0.4.81/go.mod h1:X/CVy+BJDASlwrjpwJC4+jzD5Oeaw/NHGYkKRO3r9Tc=
+github.com/hatchify/cron v0.4.82 h1:NXiWl4/9w8Egg2N2FCrQuPYLevszgUv62ZHHMzfFbi8=
+github.com/hatchify/cron v0.4.82/go.mod h1:X/CVy+BJDASlwrjpwJC4+jzD5Oeaw/NHGYkKRO3r9Tc=
 github.com/hatchify/errors v0.4.82 h1:o7eB9r1X3Sx7PBRRXMCaAm+vXcoQLE4ZOesIv4oK36Q=
 github.com/hatchify/errors v0.4.82/go.mod h1:niCrsPjs0fFes147TgJ0LSUVdtavQTUvBxNoJm9Vew0=
-github.com/hatchify/scribe v0.4.86 h1:vP5IJGKXHIiLQahqsLQYpAVu4Nyg7foLQJ1227Xv32Q=
-github.com/hatchify/scribe v0.4.86/go.mod h1:X0hlak1lh49fiWKTs1hoyXRfubY+HDXG5aHVq9XNbXo=
+github.com/hatchify/scribe v0.4.87 h1:dfAjUJQvAbFbg9fvvCMa/dB0839KWB78aPUtUp95weI=
+github.com/hatchify/scribe v0.4.87/go.mod h1:uuAiA5oKKL+CEJDEVcGWQyiW8yVzljv11Z/O2gotpjY=
 github.com/hatchify/stringset v0.4.79 h1:R/mxFEDeLVb9LDO/eaXlpeO3SxyjsnUI6iWaY7Iy57Y=
 github.com/hatchify/stringset v0.4.79/go.mod h1:bKqgmbhsxVL+o2JiWcmBUhPS9GOSQFwkJtgXJynjGps=
